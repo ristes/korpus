@@ -7,7 +7,7 @@
 		<label class="control-label" for="inputName">First Word</label>
 		<div class="controls">
 			#{wordfilter varName:"first", showField:"true"  /}
-			<button onclick="next('#second',this)" type="button" class="btn">Add</button>
+			<button onclick="addFilter('#second',this)" type="button" class="btn" id="firstadd">Add</button>
 		</div>
 	</div>
 	
@@ -18,7 +18,8 @@
 				#{wordfilter varName:"firstSeparator" /}
 			</div>
 			#{wordfilter varName:"second", showField:"true" /}
-			<button onclick="next('#third',this)" type="button" class="btn">Add</button>
+			<button onclick="addFilter('#third',this,'#secondremove')" type="button" class="btn" id="secondadd">Add</button>
+			<button onclick="removeFilter('#second','#firstadd')" type="button" class="btn" id="secondremove">Remove</button>
 		</div>
 	</div>
 	<div class="control-group" id="third">
@@ -28,6 +29,7 @@
 				#{wordfilter varName:"secondSeparator" /}
 			</div>
 			#{wordfilter varName:"third", showField:"true"  /}
+			<button onclick="removeFilter('#third','#secondadd','#secondremove')" type="button" class="btn">Remove</button>
 		</div>
 	</div>
 	<div class="control-group">
@@ -38,12 +40,23 @@
 </form>
 </div>
 <script type="text/javascript">
-	function next(id,btn) {
+	function addFilter(id,btn,rmBtn) {
 		$(btn).hide();
-		$(id).enable().show();		
+		$(rmBtn).hide();
+		$(id).show();	
+		$(id+"core").removeAttr('disabled');
+		return false;
+	}
+	function removeFilter(id,btn, btn1) {
+		$(btn).show();
+		$(btn1).show();
+		$(id+"core").attr('disabled', 'disabled');
+		$(id).hide();
 		return false;
 	}
 	
-	$("#second").disable().hide();
-	$("#third").disable().hide();
+	$("#secondcore").attr('disabled', 'disabled');
+	$("#second").hide();
+	$("#thirdcore").attr('disabled', 'disabled');
+	$("#third").hide();
 </script>

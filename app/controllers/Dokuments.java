@@ -22,6 +22,7 @@ import org.apache.lucene.util.Version;
 import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
+import utils.LuceneUtils;
 
 public class Dokuments extends Controller {
 
@@ -64,7 +65,7 @@ public class Dokuments extends Controller {
 
 			doc.save();
 
-			addToIndex(doc);
+			LuceneUtils.addToIndex(doc);
 			renderArgs.put("doc", doc);
 			manage(doc);
 		} catch (Exception ex) {
@@ -79,28 +80,11 @@ public class Dokuments extends Controller {
 		
 		
 		
+		
 
 		index();
 	}
 
-	private static void addToIndex(Dokument doc) throws Exception {
-		StandardAnalyzer analyzer = new StandardAnalyzer(Version.LUCENE_41);
-		Directory index = new SimpleFSDirectory(Play.getFile(Play.configuration
-				.getProperty("index.path")));
-
-		IndexWriterConfig config = new IndexWriterConfig(Version.LUCENE_41,
-				analyzer);
-
-		IndexWriter writer = new IndexWriter(index, config);
-		Document luceneDoc = new Document();
-		luceneDoc.add(new TextField("content", doc.text, Field.Store.NO));
-		luceneDoc.add(new StringField("name", doc.name, Field.Store.YES));
-		luceneDoc.add(new StringField("category", doc.category.name,
-				Field.Store.YES));
-
-		writer.addDocument(luceneDoc);
-		writer.close();
-
-	}
+	
 
 }
