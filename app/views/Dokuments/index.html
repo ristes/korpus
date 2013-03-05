@@ -1,0 +1,49 @@
+#{extends 'main.html' /} #{set title:'Home' /}
+
+<div class="row" style="margin-top: 20px">
+<form class="form-horizontal" action="@{Dokuments.search()}" method="post">
+	<input type="hidden" name="doc.id" value="${doc.id}"/>
+	<div class="control-group">
+		<label class="control-label" for="inputName">First Word</label>
+		<div class="controls">
+			#{wordfilter varName:"first", showField:"true"  /}
+			<button onclick="next('#second',this)" type="button" class="btn">Add</button>
+		</div>
+	</div>
+	
+	<div class="control-group" id="second">
+		<label class="control-label" for="inputName">Second</label>
+		<div class="controls">
+			<div class="controls">
+				#{wordfilter varName:"firstSeparator" /}
+			</div>
+			#{wordfilter varName:"second", showField:"true" /}
+			<button onclick="next('#third',this)" type="button" class="btn">Add</button>
+		</div>
+	</div>
+	<div class="control-group" id="third">
+		<label class="control-label" for="inputName">Third</label>
+		<div class="controls">
+			<div class="controls">
+				#{wordfilter varName:"secondSeparator" /}
+			</div>
+			#{wordfilter varName:"third", showField:"true"  /}
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" class="btn">Search</button>
+		</div>
+	</div>
+</form>
+</div>
+<script type="text/javascript">
+	function next(id,btn) {
+		$(btn).hide();
+		$(id).enable().show();		
+		return false;
+	}
+	
+	$("#second").disable().hide();
+	$("#third").disable().hide();
+</script>

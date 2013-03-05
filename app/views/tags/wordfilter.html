@@ -1,0 +1,40 @@
+
+
+<div class="input-prepend input-append">
+	<span class="add-on" style="height: 32px">
+		%{ 
+			if(_showField) {
+		}% 
+			Prefix chars: <input type="number" class="input-mini" name="${_varName}.prefixChars" min="0" max="9" value="0" />
+		%{
+			} else {
+		}%
+			Min words: <input type="number" class="input-mini" name="${_varName}.minWords" min="0" max="9" value="0"/>
+		%{
+			}
+		}%
+		
+		 
+	</span>
+	%{ 
+		if(_showField) {
+	
+	}% 
+	<input class="span2" style="height: 32px" id="appendedPrependedInput" type="text" name="${_varName}.core" required>
+	%{
+		}
+	}%
+	<span class="add-on" style="height: 32px">
+		%{ 
+			if(_showField) {
+		}% 
+			Sufix chars: <input type="number" class="input-mini" name="${_varName}.sufixChars" min="0" max="9" value="0"/>
+		%{
+			} else {
+		}%
+			Max words: <input type="number" class="input-mini" name="${_varName}.maxWords" min="0" max="9" value="1"/>
+		%{
+			}
+		}%
+	</span>
+</div>

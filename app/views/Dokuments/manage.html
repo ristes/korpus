@@ -1,0 +1,68 @@
+#{extends 'main.html' /} #{set title:'Home' /}
+
+<div class="row" style="margin-top: 20px">
+<form class="form-horizontal" action="@{Dokuments.upload}" method="post">
+	<input type="hidden" name="doc.id" value="${doc.id}"/>
+	<div class="control-group">
+		<label class="control-label" for="inputName">Name</label>
+		<div class="controls">
+			<input type="text"
+					name="doc.name" 
+					value="${doc.name}"
+					class="span8"
+					id="inputName" 
+					placeholder="Document Name">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputAuthor">Author</label>
+		<div class="controls">
+			<input type="text"
+					name="doc.author" 
+					value="${doc.author}"
+					id="inputAuthor" 
+					class="span8"
+					placeholder="Author">
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputDate">Date</label>
+		<div class="controls">
+			<input id="inputDate" name="doc.date" value="${doc.getDateString()}"/>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputAuthor">Category</label>
+		<div class="controls">
+			<select name="doc.category.id">
+				#{list items:categories, as:'category'}
+					<option value="${category.id}">${category.name}</option>
+				#{/list}
+			</select>
+		</div>
+	</div>
+	<div class="control-group">
+		<label class="control-label" for="inputAuthor">Author</label>
+		<div class="controls">
+			<textarea type="text"
+					name="doc.text" 
+					rows="20"		
+					class="span8"			
+					id="inputAuthor" 
+					placeholder="Author">${doc.text}</textarea>
+		</div>
+	</div>
+	<div class="control-group">
+		<div class="controls">
+			<button type="submit" class="btn">Save</button>
+		</div>
+	</div>
+</form>
+</div>
+
+<script type="text/javascript">
+	$("#inputDate").datepicker({
+			format: 'dd.mm.yyyy'
+			
+	});
+</script>

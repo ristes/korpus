@@ -1,0 +1,13 @@
+<!-- 
+<li #{if request.controller=="Analysis"}class="active"#{/if}>
+    <a href="@{Analysis.index()}"><i class="icon-list-alt icon-white"></i> Анализи</a>
+</li>
+ -->
+<li #{if request.controller=="Reports"}class="active"#{/if}>
+    <a href="@{Reports.index()}"><i class="icon-book icon-white"></i> Извештаи</a>
+</li>
+<!--
+<li #{if request.controller=="SecuredCRUD"}class="active"#{/if}>
+    <a href="/admin/"><i class="icon-cog icon-white"></i> Администрација</a>
+</li>
+-->
