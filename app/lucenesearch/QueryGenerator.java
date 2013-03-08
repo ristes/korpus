@@ -1,3 +1,5 @@
+package lucenesearch;
+
 import java.util.ArrayList;
 
 public class QueryGenerator {

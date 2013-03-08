@@ -5,6 +5,7 @@ import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.persistence.Entity;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
 import play.db.jpa.Model;
@@ -20,7 +21,8 @@ public class Dokument extends Model {
 
 	public String path;
 
-	public transient String text;
+	@Lob
+	public String text;
 
 	@ManyToOne
 	public Category category;

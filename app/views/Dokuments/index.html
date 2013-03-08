@@ -1,43 +1,51 @@
 #{extends 'main.html' /} #{set title:'Home' /}
 
 <div class="row" style="margin-top: 20px">
-<form class="form-horizontal" action="@{Dokuments.search()}" method="post">
-	<input type="hidden" name="doc.id" value="${doc.id}"/>
-	<div class="control-group">
-		<label class="control-label" for="inputName">First Word</label>
-		<div class="controls">
-			#{wordfilter varName:"first", showField:"true"  /}
-			<button onclick="addFilter('#second',this)" type="button" class="btn" id="firstadd">Add</button>
-		</div>
-	</div>
-	
-	<div class="control-group" id="second">
-		<label class="control-label" for="inputName">Second</label>
-		<div class="controls">
+	<form class="form-horizontal" id="myForm" method="post">
+		<input type="hidden" name="doc.id" value="${doc.id}"/>
+		<div class="control-group">
+			<label class="control-label" for="inputName">First Word</label>
 			<div class="controls">
-				#{wordfilter varName:"firstSeparator" /}
+				#{wordfilter varName:"first", showField:"true"  /}
+				<button onclick="addFilter('#second',this)" type="button" class="btn" id="firstadd">Add</button>
 			</div>
-			#{wordfilter varName:"second", showField:"true" /}
-			<button onclick="addFilter('#third',this,'#secondremove')" type="button" class="btn" id="secondadd">Add</button>
-			<button onclick="removeFilter('#second','#firstadd')" type="button" class="btn" id="secondremove">Remove</button>
 		</div>
-	</div>
-	<div class="control-group" id="third">
-		<label class="control-label" for="inputName">Third</label>
-		<div class="controls">
+		
+		<div class="control-group" id="second">
+			<label class="control-label" for="inputName">Second</label>
 			<div class="controls">
-				#{wordfilter varName:"secondSeparator" /}
+				<div class="controls">
+					#{wordfilter varName:"firstSeparator" /}
+				</div>
+				#{wordfilter varName:"second", showField:"true" /}
+				<button onclick="addFilter('#third',this,'#secondremove')" type="button" class="btn" id="secondadd">Add</button>
+				<button onclick="removeFilter('#second','#firstadd')" type="button" class="btn" id="secondremove">Remove</button>
 			</div>
-			#{wordfilter varName:"third", showField:"true"  /}
-			<button onclick="removeFilter('#third','#secondadd','#secondremove')" type="button" class="btn">Remove</button>
 		</div>
-	</div>
+		<div class="control-group" id="third">
+			<label class="control-label" for="inputName">Third</label>
+			<div class="controls">
+				<div class="controls">
+					#{wordfilter varName:"secondSeparator" /}
+				</div>
+				#{wordfilter varName:"third", showField:"true"  /}
+				<button onclick="removeFilter('#third','#secondadd','#secondremove')" type="button" class="btn">Remove</button>
+			</div>
+		</div>
+	</form>
 	<div class="control-group">
 		<div class="controls">
-			<button type="submit" class="btn">Search</button>
+			<button id="search" type="submit" class="btn">Search</button>
 		</div>
 	</div>
-</form>
+</div>
+<h2>Search Results</h2>
+<div id="searchResults" class="row">
+
+</div>
+<h2>Details</h2>
+<div id="detailsResults" class="row">
+
 </div>
 <script type="text/javascript">
 	function addFilter(id,btn,rmBtn) {
@@ -59,4 +67,56 @@
 	$("#second").hide();
 	$("#thirdcore").attr('disabled', 'disabled');
 	$("#third").hide();
+	String.format = function() {
+		var s = arguments[0];
+		for (var i = 0; i < arguments.length - 1; i++) {       
+			var reg = new RegExp("\\{" + i + "\\}", "gm");             
+			s = s.replace(reg, arguments[i + 1]);
+		}
+
+		return s;
+	}
+	
+	function displayDetails(btn) {
+		
+		$.ajax({
+	           type: "POST",
+	           url: '@{Dokuments.details()}',
+	           data: {
+	        	   word: btn.dataset.word
+	           }, // serializes the form's elements.
+	           success: function(data)
+	           {
+	        	   
+	        	   var resultsContainer=$("#detailsResults");
+	        	   resultsContainer.html("");
+	               for(var i=0;i<data.length;i++) {
+	            	  
+	            	   var v=String.format('<div class="span5 search-result">{0}</div>',data[i]);
+	            	   resultsContainer.append(v);
+	               }
+	           }
+      });
+		return false;
+	}
+	
+	$("#search").click(function(){
+		$.ajax({
+	           type: "POST",
+	           url: '@{Dokuments.search()}',
+	           data: $("#myForm").serialize(), // serializes the form's elements.
+	           success: function(data)
+	           {
+	        	   var resultsContainer=$("#searchResults");
+	        	   resultsContainer.html("");
+	               for(var i=0;i<data.length;i++) {
+	            	   var v=String.format('<div class="span3 search-result"><i>{0}</i> <b>{1}</b>\n'+
+	            			   '<button class="btn btn-info word-result" data-word="{1}" onclick="displayDetails(this)">'+
+	            			   '<i class="icon-eye-open"></i></button></div>', data[i].value,data[i].key);
+	            	   resultsContainer.append(v);
+	               }
+	           }
+         });
+		return false;
+	});
 </script>
