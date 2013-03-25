@@ -1,0 +1,104 @@
+<script type="text/javascript">
+	var dokumentId=${_docId};
+	var delimiter=" ";
+	var valid="éабвгдѓежзѕијклљмнњопрстќуфхцчџшАБВГДЃЕЖЗЅИЈКЛЉМНЊОПРСТЌУФХЦЧЏШ1234567890'`";
+	
+	function taggedSorter(a, b) {
+		return parseInt(a.dataset["start"],10) > parseInt(b.dataset["start"],10)? 1 : -1;
+	}
+	
+	function getAnotate(tagId, tagColor, tagName) {
+		var annotate = function(){
+			var range=window.getSelection().getRangeAt(0);
+			var wholeText=range.commonAncestorContainer.data;
+			var word=wholeText.substring(range.startOffset,range.endOffset);
+			var end=wholeText.indexOf(delimiter,range.endOffset);
+			$.post('/dokuments/add', {
+					taggedWord : {
+						start : range.startOffset,
+						end : range.endOffset,
+						"dokument.id" : dokumentId,
+						"tag.id" : tagId
+					}							
+				}, function(data) {
+					ddd=data;
+					$("#result").append('<span ondblclick="removeTaggedWord(this)" style="color:'+tagColor+'" title="'+tagName+'" data-start="'+range.startOffset+'">'+word+' </span>');
+					var res=$("div#result span").sort(taggedSorter);
+					$("#result").html(res);
+				});
+			
+			nextWord(range);
+		};
+		return annotate;
+	}
+	
+	
+	function nextWord(range) {
+		var selection=window.getSelection();
+	
+		var wholeText=range.endContainer.textContent;
+		start=range.endOffset+1;
+		while(valid.indexOf(wholeText[start])<0) { 
+			start++;
+		}
+		end=start;
+		while(valid.indexOf(wholeText[end])>=0) { 
+			end++;
+		}
+		
+		range.setStart(range.endContainer,start);
+		range.setEnd(range.endContainer, end);
+		selection.removeAllRanges();
+		selection.addRange(range);
+		
+	}
+	
+	function removeTaggedWord(el){
+		$.post('/dokuments/remove', 
+				{"word.id" : el.dataset["id"]},
+				function(data) {
+					el.parentElement.removeChild(el)
+		});
+	}
+	
+	
+	$(document).ready(function(){
+		$.post('/dokuments/taggedWords', 
+			{"dokument.id" : dokumentId},
+			function(data) {
+				var target=$("#result");
+				wholeText=$("#source").html();
+				for(var i=0;i<data.length;i++) {
+					var tag=data[i];
+					word="ddd";
+					target.append('<span ondblclick="removeTaggedWord(this)" style="color:'+tag.tag.color+'" title="'+tag.name+'" data-start="'+tag.start+'" data-id="'+tag.id+'">'+
+							'<b>'+wholeText.substring(tag.start,tag.end)+'</b>'
+							+' </span>');
+					
+				}
+				var res=$("div#result span").sort(taggedSorter);
+				$("#result").html(res);
+			});
+	});
+	
+</script>
+
+<div>
+	<div>
+		#{list items:_tags, as:'tag'}
+			<div class="tag-button" id="new_button" style="background-color:${tag.color};color: #fff; width: 143px" >
+				<span class="key-combo">${tag.binding}</span>
+				<span class="key-action">${tag.name}</span>
+			</div>
+			<script type="text/javascript">
+					$(document).bind('keydown','${tag.binding}',getAnotate('${tag.id}', 
+							'${tag.color}','${tag.name}'));
+			</script>
+		#{/ list}
+	</div>
+	
+	<pre id="source" style="max-height: 600px;overflow: scroll;clear:both">
+		${_text}
+	</pre>
+</div>
+

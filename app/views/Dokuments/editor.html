@@ -1,0 +1,20 @@
+#{extends 'main.html' /} #{set title:'Home' /}
+
+<div class="row" style="margin-top: 20px">
+
+
+	<table>
+		<tr>
+			<td width="50%">
+				#{bbar docId: doc.id, text: doc.text, tags:tags /}				
+			</td>
+			<td width="50%">
+				Double click on word to remove the tag!
+				<div id="result" style="height: 600px;max-height: 600px;overflow: scroll;">
+					Loading ...
+				</div>
+			</td>
+		</tr>
+	</table>
+
+</div>

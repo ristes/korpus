@@ -62,11 +62,10 @@ public class LuceneUtils {
 		IndexWriter writer = getIndexWriter();
 
 		Document luceneDoc = new Document();
-		luceneDoc.add(new TextField("content", " " + doc.text + " ",
-				Field.Store.YES));
+		luceneDoc.add(new TextField("content", doc.text, Field.Store.YES));
 		luceneDoc.add(new StringField("name", doc.name, Field.Store.YES));
 		luceneDoc.add(new StringField("category", doc.category.name,
-				Field.Store.YES));
+				Field.Store.YES));	
 
 		writer.addDocument(luceneDoc);
 		writer.close();
@@ -137,7 +136,8 @@ public class LuceneUtils {
 		return wc;
 	}
 
-	public static ArrayList<String> getResults(String searched, int max) throws IOException {
+	public static ArrayList<String> getResults(String searched, int max)
+			throws IOException {
 		return DetailedResults.getResults(getIndexSearcher(), searched, max);
 	}
 }

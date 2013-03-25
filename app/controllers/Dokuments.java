@@ -6,8 +6,17 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.persistence.OneToMany;
+
+import com.google.gson.ExclusionStrategy;
+import com.google.gson.FieldAttributes;
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
 import models.Category;
 import models.Dokument;
+import models.Tag;
+import models.TaggedWord;
 import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
@@ -39,25 +48,10 @@ public class Dokuments extends Controller {
 	public static void upload(Dokument doc) {
 
 		try {
-			File target = new File(Play.getFile(Play.configuration
-					.getProperty("upload.path")), String.format("%s.txt",
-					doc.name));
-
-			if (!target.exists()) {
-				target.createNewFile();
-			}
-
-			FileWriter fr = new FileWriter(target);
-			fr.write(doc.text);
-			fr.close();
-
-			doc.path = String.format("%s%s.txt",
-					Play.configuration.getProperty("upload.path"), doc.name);
-
 			doc.save();
 			LuceneUtils.addToIndex(doc);
 			renderArgs.put("doc", doc);
-			render("/dokuments/manage.html");
+			manage(null);
 		} catch (Exception ex) {
 			ex.printStackTrace();
 		}
@@ -96,10 +90,56 @@ public class Dokuments extends Controller {
 
 	public static void details(String word) throws IOException {
 		ArrayList<String> details = new ArrayList<String>();
-		
+
 		if (word != null) {
 			details = LuceneUtils.getResults(word, 10);
 		}
 		renderJSON(details);
 	}
+
+	public static void editor(long id) {
+		Dokument doc = Dokument.findById(id);
+		List<Tag> tags = Tag.findAll();
+		render(doc, tags);
+	}
+
+	public static void add(TaggedWord taggedWord) {
+		taggedWord.save();
+
+		renderJSON(toJson(taggedWord));
+
+	}
+
+	public static void taggedWords(Dokument dokument) {
+		renderJSON(toJson(dokument.taggedWords));
+	}
+	
+	public static void remove(TaggedWord word) {
+		word.delete();
+	}
+
+	protected static String toJson(Object o) {
+		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy")
+				.setExclusionStrategies(ignoreManySet).create();
+		String s = gson.toJson(o);
+		return s;
+	}
+
+	private static ExclusionStrategy ignoreManySet = new ExclusionStrategy() {
+
+		@Override
+		public boolean shouldSkipField(FieldAttributes attrs) {
+			OneToMany otm = attrs.getAnnotation(OneToMany.class);
+			if (otm != null) {
+				return true;
+			} else {
+				return false;
+			}
+		}
+
+		@Override
+		public boolean shouldSkipClass(Class<?> clazz) {
+			return false;
+		}
+	};
 }

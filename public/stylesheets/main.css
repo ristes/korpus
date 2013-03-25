@@ -1,3 +1,271 @@
+.tag-button {
+	float: left;
+	padding-right: 2px;
+}
+
 .search-result {
-	padding:5px;
+	padding: 5px;
+}
+
+#bottombar_wrapper {
+	position: absolute;
+	bottom: 0;
+	right: 6px;
+	height: 44px;
+	-webkit-transition: left 250ms ease-out;
+	-moz-transition: left 250ms ease-out;
+	-webkit-transition-delay: 150ms;
+	-moz-transition-delay: 150ms;
+	pointer-events: none;
+	
+}
+
+#bottombar_wrapper.with-videos {
+	height: 98px;
+}
+
+#bottombar_wrapper a {
+	color: #114d97;
+}
+
+#bottombar_wrapper #bottombar_tab {
+	height: 12px;
+	width: 12px;
+	background-image:
+		url(https://app.asana.com/-/static/apps/asana/media/sprite.png?1362445226);
+	background-position: -300px -1600px;
+	background-repeat: no-repeat;
+}
+
+#bottombar_wrapper #bottombar {
+	top: 12px;
+	background-color: #f2f2f2;
+	border: 1px solid #e5e5e5;
+	border-left: 1px solid #AAAAAA;
+	box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	-moz-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	-webkit-box-shadow: 0 0 4px rgba(0, 0, 0, 0.15);
+	font-size: 12px;
+	font-weight: 600;
+	pointer-events: auto;
+}
+
+#bottombar_wrapper .bottombar-divider {
+	display: inline-block;
+	vertical-align: top;
+	width: 1px;
+	border-left: 1px solid #9cacbc;
+}
+
+#bottombar_wrapper .bottombar-button {
+	color: #596573;
+	height: 100%;
+	line-height: 32px;
+	padding: 0px 10px;
+	border-right: 1px solid transparent;
+}
+
+#bottombar_wrapper .bottombar-button:hover {
+	color: #114d97;
+	text-decoration: none;
+}
+
+#bottombar_wrapper .bottombar-button:focus,#bottombar_wrapper .bottombar-button.pressed
+	{
+	box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	background-color: #dde4ea;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#dde4ea),
+		color-stop(10%, #dde4ea));
+	background-image: -moz-linear-gradient(90deg, #dde4ea 90%, #dde4ea);
+	border-color: #afbcc8;
+	outline: none;
+	border-right: 1px solid #9cacbc;
+	background: #e5e5e5;
+}
+
+#bottombar_wrapper .bottombar-button:focus .button-text,#bottombar_wrapper .bottombar-button:focus .new-button-text,#bottombar_wrapper .bottombar-button.pressed .button-text,#bottombar_wrapper .bottombar-button.pressed .new-button-text
+	{
+	color: #596573;
+	text-shadow: 0px 1px white;
+}
+
+#bottombar_wrapper .bottombar-button:focus:hover:not (.unhovered ),#bottombar_wrapper .bottombar-button.pressed:hover:not
+	(.unhovered ) {
+	box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	-moz-box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	-webkit-box-shadow: inset 0px 1px rgba(0, 0, 0, 0.12);
+	background-color: #dde4ea;
+	background-image: -webkit-gradient(linear, left top, left bottom, from(#dde4ea),
+		color-stop(10%, #dde4ea));
+	background-image: -moz-linear-gradient(90deg, #dde4ea 90%, #dde4ea);
+	border-color: #afbcc8;
+	outline: none;
+}
+
+#bottombar_wrapper .bottombar-button:focus:hover:not (.unhovered ) .button-text,#bottombar_wrapper .bottombar-button:focus:hover:not
+	(.unhovered ) .new-button-text,#bottombar_wrapper .bottombar-button.pressed:hover:not
+	(.unhovered ) .button-text,#bottombar_wrapper .bottombar-button.pressed:hover:not
+	(.unhovered ) .new-button-text {
+	color: #114d97;
+	text-shadow: 0px 1px white;
+}
+
+#bottombar_wrapper .bottombar-minimize {
+	float: right;
+	border-left: 1px solid #9cacbc;
+	width: 16px;
+	height: 100%;
+	background-image:
+		url(https://app.asana.com/-/static/apps/asana/media/sprite.png?1362445226);
+	background-position: -192px -1798px;
+	background-repeat: no-repeat;
+}
+
+#bottombar_wrapper #videobar {
+	height: 32px;
+	padding: 7px 10px;
+	padding-bottom: 14px;
+	overflow: hidden;
+	border-bottom: 1px solid #e5e5e5;
+}
+
+#bottombar_wrapper #videobar .bottombar-minimize {
+	margin-top: 2px;
+}
+
+#bottombar_wrapper #videobar .video-column {
+	display: inline-block;
+	vertical-align: top;
+	width: 20%;
+	min-width: 185px;
+	margin-right: 15px;
+}
+
+#bottombar_wrapper #videobar .video-column .video {
+	display: block;
+	color: #114d97;
+	line-height: 20px;
+	height: 20px;
+	overflow: hidden;
+	cursor: pointer;
+}
+
+#bottombar_wrapper #videobar .video-column .video:hover {
+	text-decoration: none;
+}
+
+#bottombar_wrapper #videobar .video-column .video:hover .video-major-title
+	{
+	text-decoration: underline;
+}
+
+#bottombar_wrapper #videobar .video-column .video .play-icon {
+	display: inline-block;
+	background-image:
+		url(https://app.asana.com/-/static/apps/asana/media/sprite.png?1362445226);
+	background-position: 0px -1648px;
+	background-repeat: no-repeat;
+	height: 20px;
+	width: 20px;
+}
+
+#bottombar_wrapper #videobar .video-column .video .play-icon,#bottombar_wrapper #videobar .video-column .video .video-major-title,#bottombar_wrapper #videobar .video-column .video .video-minor-title
+	{
+	vertical-align: top;
+}
+
+#bottombar_wrapper #videobar .video-column .video .video-minor-title {
+	font-style: normal;
+	color: #999999;
+	margin-left: 4px;
+}
+
+#bottombar_wrapper #videobar .videobar-title {
+	color: #596573;
+	width: 45px;
+	line-height: 18px;
+	min-width: 0px;
+}
+
+#bottombar_wrapper #helpbar {
+	height: 30px;
+	position: relative;
+	overflow: hidden;
+}
+
+#bottombar_wrapper #helpbar #help_menu {
+	display: inline-block;
+	vertical-align: top;
+}
+
+#bottombar_wrapper #helpbar #help_menu .arrow {
+	display: inline-block;
+	vertical-align: middle;
+	margin-left: 8px;
+	width: 10px;
+	height: 7px;
+	background-image:
+		url(https://app.asana.com/-/static/apps/asana/media/sprite.png?1362445226);
+	background-position: 0px -50px;
+	background-repeat: no-repeat;
+}
+
+#bottombar_wrapper #helpbar #help_menu:hover .arrow {
+	background-image:
+		url(https://app.asana.com/-/static/apps/asana/media/sprite.png?1362445226);
+	background-position: -100px -50px;
+	background-repeat: no-repeat;
+}
+
+#bottombar_wrapper #helpbar span.invite-link {
+	float: right;
+	margin-right: 10px;
+	margin-top: 4px;
+}
+
+#bottombar_wrapper #helpbar .bottombar-divider {
+	height: 13px;
+	margin: 10px 0px;
+	margin-left: -1px;
+}
+
+#bottombar_wrapper #helpbar .shortcut,#bottombar_wrapper #helpbar #more_shortcuts_link
+	{
+	display: inline-block;
+	vertical-align: top;
+	padding: 0px 10px;
+	margin: 10px 0px;
+}
+
+#bottombar_wrapper #helpbar .shortcut:hover {
+	text-decoration: none;
+}
+
+#bottombar_wrapper #helpbar .shortcut:hover .key-action {
+	text-decoration: underline;
+}
+
+#bottombar_wrapper #helpbar .shortcut .key-combo {
+	font-size: 12px;
+	font-weight: 600;
+	color: #596573;
+	margin-right: 8px;
+}
+
+#bottombar_wrapper #helpbar .shortcut .key-action {
+	font-size: 11px;
+	font-weight: 600;
+	color: #114d97;
+}
+
+.symbol_arrow {
+	position: relative;
+	bottom: 2px;
+}
+
+.symbol_enter {
+	position: relative;
+	top: 2px;
 }
