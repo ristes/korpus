@@ -33,6 +33,9 @@
 						<li #{if request.controller=="admin.TagAdmin"}class="active"#{/if}>
 						    <a href="@{admin.TagAdmin.list()}"><i class="icon-book icon-white"></i> Тагови</a>
 						</li>
+						<li #{if request.controller=="admin.UserAdmin"}class="active"#{/if}>
+						    <a href="@{admin.UserAdmin.list()}"><i class="icon-book icon-white"></i> Корисници</a>
+						</li>
 						
 						
 					#{/if}
