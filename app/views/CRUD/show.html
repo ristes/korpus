@@ -1,0 +1,38 @@
+#{extends 'CRUD/layout.html' /}
+#{set title:messages.get('crud.show.title', type.modelName) /}
+
+<div id="crudShow" class="${type.name}">
+<div class="page-header">
+    <h1 id="crudShowTitle">&{'crud.show.title', type.modelName}</h1>
+</div>
+
+    <div class="objectForm">
+    #{form action:@save(object._key()), enctype:'multipart/form-data'}
+        #{crud.form /}
+        <div class="form-actions">
+            <input type="submit" name="_save" class="btn btn-primary" value="&{'crud.save', type.modelName}" />
+            <input type="submit" name="_saveAndContinue" class="btn" value="&{'crud.saveAndContinue', type.modelName}" />
+            <a href="#deleteAlert" role="button" class="btn btn-danger" data-toggle="modal">&{'crud.delete', type.modelName}</a>
+        </div>
+    #{/form}
+    </div>
+
+    
+
+</div>
+
+<div class="modal hide fade" id="deleteAlert" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Предупредување</h3>
+  </div>
+  <div class="modal-body">
+    <p>Дали сте сигурни дека сакате да го избришете овој запис?</p>
+  </div>
+  <div class="modal-footer">
+    #{form @delete(object._key())}
+        <input type="submit" value="Да" class="btn btn-danger" />
+        <button type="button" class="btn" data-dismiss="modal" aria-hidden="true">Откажи</button>
+    #{/form}
+  </div>
+</div>

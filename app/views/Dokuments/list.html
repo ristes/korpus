@@ -1,0 +1,31 @@
+#{extends 'main.html' /} #{set title:'Home' /}
+
+<div class="container">
+	<h2>All Documens</h2>
+	<hr/>
+	<table>
+		<tr style="text-align: left;">
+			<th>Document name</th>
+			<th>Author</th>
+			<th>Category</th>
+		</tr>
+		#{list items: dokuments, as: 'doc'}
+			<tr>
+				<td style="padding: 2px;padding-right: 15px">
+					<a href="/dokuments/editor?id=${doc.id}">
+						${doc.name}
+					</a>
+				</td>
+				<td style="padding: 2px;padding-right: 15px">${doc.author}</td>
+				<td style="padding: 2px;padding-right: 15px">${doc.category.name}</td>
+				#{if session.username }
+					#{if session.isAdmin == 'true' }
+					<td style="padding: 2px;padding-right: 15px">
+						<a href="/dokuments/manage?doc.id=${doc.id}">Уреди</a>
+					</td>
+					#{/if}
+				#{/if}
+			</tr>
+		#{/list}
+	</table>
+</div>

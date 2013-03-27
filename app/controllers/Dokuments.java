@@ -20,10 +20,12 @@ import models.TaggedWord;
 import play.Play;
 import play.mvc.Before;
 import play.mvc.Controller;
+import play.mvc.With;
 import utils.Entry;
 import utils.LuceneUtils;
 import utils.WordFilter;
 
+@With(Authentication.class)
 public class Dokuments extends Controller {
 
 	@Before
@@ -36,6 +38,11 @@ public class Dokuments extends Controller {
 	public static void index() {
 
 		render();
+	}
+
+	public static void list() {
+		List<Dokument> dokuments = Dokument.findAll();
+		render(dokuments);
 	}
 
 	public static void manage(Dokument doc) {
@@ -113,9 +120,10 @@ public class Dokuments extends Controller {
 	public static void taggedWords(Dokument dokument) {
 		renderJSON(toJson(dokument.taggedWords));
 	}
-	
+
 	public static void remove(TaggedWord word) {
 		word.delete();
+		renderJSON(toJson(word));
 	}
 
 	protected static String toJson(Object o) {

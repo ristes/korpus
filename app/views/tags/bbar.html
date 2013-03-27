@@ -3,13 +3,21 @@
 	var delimiter=" ";
 	var valid="éабвгдѓежзѕијклљмнњопрстќуфхцчџшАБВГДЃЕЖЗЅИЈКЛЉМНЊОПРСТЌУФХЦЧЏШ1234567890'`";
 	
+	state={};
+	
 	function taggedSorter(a, b) {
 		return parseInt(a.dataset["start"],10) > parseInt(b.dataset["start"],10)? 1 : -1;
 	}
 	
 	function getAnotate(tagId, tagColor, tagName) {
 		var annotate = function(){
+
+			var pre= document.getElementById("source");
 			var range=window.getSelection().getRangeAt(0);
+			if(range.commonAncestorContainer.parentElement!=pre) {
+				initSelection();
+				return;
+			}
 			var wholeText=range.commonAncestorContainer.data;
 			var word=wholeText.substring(range.startOffset,range.endOffset);
 			var end=wholeText.indexOf(delimiter,range.endOffset);
@@ -21,10 +29,11 @@
 						"tag.id" : tagId
 					}							
 				}, function(data) {
-					ddd=data;
 					$("#result").append('<span ondblclick="removeTaggedWord(this)" style="color:'+tagColor+'" title="'+tagName+'" data-start="'+range.startOffset+'">'+word+' </span>');
 					var res=$("div#result span").sort(taggedSorter);
 					$("#result").html(res);
+					state.tags.push(data);
+					state.tags.sort(sortTags);
 				});
 			
 			nextWord(range);
@@ -37,19 +46,38 @@
 		var selection=window.getSelection();
 	
 		var wholeText=range.endContainer.textContent;
-		start=range.endOffset+1;
-		while(valid.indexOf(wholeText[start])<0) { 
-			start++;
-		}
-		end=start;
-		while(valid.indexOf(wholeText[end])>=0) { 
-			end++;
-		}
+		do {
+			start=range.endOffset+1;
+			var word="";
+			while(valid.indexOf(wholeText[start])<0) { 
+				start++;
+			}
+			end=start;
+			while(valid.indexOf(wholeText[end])>=0) { 
+				word+=wholeText[end];
+				end++;
+			}
+			$("#selectedWord").html(word);
+			range.setStart(range.endContainer,start);
+			range.setEnd(range.endContainer, end);
+		} while(hasIntersectionWithTag(start, end));
 		
-		range.setStart(range.endContainer,start);
-		range.setEnd(range.endContainer, end);
 		selection.removeAllRanges();
 		selection.addRange(range);
+	}
+	
+	function hasIntersectionWithTag(start, end) {
+		ss=start;
+		ee=end;
+		for(var i=0;i<state.tags.length;i++) {
+			var tag=state.tags[i];
+			if(start<tag.start) {
+				return false;
+			}
+			if((tag.start<=start && start<=tag.end)||(tag.start<=end && end<=tag.end)) {
+				return true;
+			}
+		}
 		
 	}
 	
@@ -58,16 +86,49 @@
 				{"word.id" : el.dataset["id"]},
 				function(data) {
 					el.parentElement.removeChild(el)
+					var idx=-1;
+					for(var i=0;i<state.tags.length;i++) {
+						var tag=state.tags[i];
+						if(tag.id==data.id) {
+							idx=i;
+							break;
+						}
+					}
+					if(idx!=-1) {
+						state.tags.splice(idx,1);
+					}
+					initSelection();
 		});
+		
 	}
 	
+	function initSelection(){
+		var selection=window.getSelection();
+		var range=document.createRange();
+		var pre= document.getElementById("source");
+		range.selectNodeContents(pre);
+		range.setStart(pre.firstChild,0);
+		range.setEnd(pre.firstChild,0);
+		selection.removeAllRanges();
+		selection.addRange(range);
+		nextWord(range);
+		
+	}
+	
+	function sortTags(a,b) {
+		return parseInt(a.start,10) > parseInt(b.start,10) ? 1 : -1; 
+	}
 	
 	$(document).ready(function(){
 		$.post('/dokuments/taggedWords', 
 			{"dokument.id" : dokumentId},
 			function(data) {
+				if(!data) {
+					data=[];
+				}
 				var target=$("#result");
 				wholeText=$("#source").html();
+				state.tags=data;
 				for(var i=0;i<data.length;i++) {
 					var tag=data[i];
 					word="ddd";
@@ -77,7 +138,9 @@
 					
 				}
 				var res=$("div#result span").sort(taggedSorter);
+				state.tags.sort(sortTags);
 				$("#result").html(res);
+				initSelection();
 			});
 	});
 	
@@ -97,7 +160,7 @@
 		#{/ list}
 	</div>
 	
-	<pre id="source" style="max-height: 600px;overflow: scroll;clear:both">
+	<pre id="source" style="max-height: 600px;overflow: scroll;clear:both" on="initSelection()">
 		${_text}
 	</pre>
 </div>

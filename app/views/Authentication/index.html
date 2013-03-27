@@ -1,0 +1,40 @@
+#{extends 'main.html' /} 
+#{set title:'Автентикација' /}
+
+
+<div class="page-header">
+	<h1>Автентикација</h1>
+</div>
+
+#{ifErrors}
+<div class="alert alert-error"> 
+   <h2>Грешка при најавувањето</h2>
+ 
+   #{errors}
+       <li class="error">${error}</li>
+   #{/errors}
+</div>
+#{/ifErrors}
+
+<form class="form-horizontal" method="post" action="@{Authentication.login()}">
+  <div class="control-group">
+    <label class="control-label" for="login">Корисничко име</label>
+    <div class="controls">
+      <input type="text" id="login" placeholder="Вашето корисничко име..." name="login" required="required" value="${login}">
+    </div>
+  </div>
+  <div class="control-group">
+    <label class="control-label" for="inputPassword">Password</label>
+    <div class="controls">
+      <input type="password" id="inputPassword" placeholder="Вашата лозинка..." name="password" required="required">
+    </div>
+  </div>
+  <div class="control-group">
+    <div class="controls">
+      <label class="checkbox">
+        <input type="checkbox"> Запомни ме
+      </label>
+      <button type="submit" class="btn">Најави се</button>
+    </div>
+  </div>
+</form>

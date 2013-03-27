@@ -8,7 +8,9 @@ import java.io.InputStreamReader;
 import models.Lexicon;
 import play.Play;
 import play.mvc.Controller;
+import play.mvc.With;
 
+@With(Authentication.class)
 public class LexiconController extends Controller {
 
 	public static void initLexicon() throws Exception {

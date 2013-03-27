@@ -1,0 +1,25 @@
+#{extends 'CRUD/layout.html' /}
+#{set title:messages.get('crud.list.title', type.name) /}
+
+<div id="crudList" class="${type.name}">
+    <div class="page-header">
+        <h1>&{'crud.list.title', type.name}</h1>
+    </div>
+
+    <div id="crudListAdd" class="pull-right" style="width:300px;">
+        <a href="@{blank()}" class="btn btn-large btn-block btn-primary">&{'crud.add', type.modelName}</a>
+    </div>
+    <div id="crudListSearch">
+        #{crud.search /}
+    </div>
+
+    <div id="crudListTable">
+        #{crud.table /}
+    </div>
+
+    <div id="crudListPagination">
+        #{crud.pagination /}
+    </div>
+
+
+</div>

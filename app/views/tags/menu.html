@@ -6,10 +6,50 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </a>
-          <a class="brand" href="#" title="Почетна"><i class="icon-home icon-white"></i></a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-             
+            	#{if session.username }
+					#{if session.isAdmin == 'true' }
+						#{if request.action=="Dokuments.editor"}
+						<li class="active">
+						    <a href="#"><i class="icon-book icon-white"></i> Тагирање</a>
+						</li>
+						#{/if}
+						<li #{if request.action=="Dokuments.index"}class="active"#{/if}>
+						    <a href="@{Dokuments.index()}"><i class="icon-book icon-white"></i> Пребарување</a>
+						</li>
+						<li #{if request.action=="Dokuments.list"}class="active"#{/if}>
+						    <a href="@{Dokuments.list()}"><i class="icon-book icon-white"></i> Преглед</a>
+						</li>
+						<li #{if request.action=="Dokuments.manage"}class="active"#{/if}>
+						    <a href="@{Dokuments.manage()}"><i class="icon-book icon-white"></i> Документи</a>
+						</li>
+						<li #{if request.controller=="admin.CategoryAdmin"}class="active"#{/if}>
+						    <a href="@{admin.CategoryAdmin.list()}"><i class="icon-book icon-white"></i> Категории</a>
+						</li>
+						<li #{if request.controller=="admin.TagGroupAdmin"}class="active"#{/if}>
+						    <a href="@{admin.TagGroupAdmin.list()}"><i class="icon-book icon-white"></i> Тагсет</a>
+						</li>
+						<li #{if request.controller=="admin.TagAdmin"}class="active"#{/if}>
+						    <a href="@{admin.TagAdmin.list()}"><i class="icon-book icon-white"></i> Тагови</a>
+						</li>
+						
+						
+					#{/if}
+					#{if session.isEditor == 'true' }
+		             	<li #{if request.action=="Dokuments.index"}class="active"#{/if}>
+						    <a href="@{Dokuments.index()}"><i class="icon-book icon-white"></i> Пребарување</a>
+						</li>
+						<li #{if request.action=="Dokuments.list"}class="active"#{/if}>
+						    <a href="@{Dokuments.list()}"><i class="icon-book icon-white"></i> Преглед</a>
+						</li>
+						#{if request.action=="Dokuments.editor"}
+						<li class="active">
+						    <a href="#"><i class="icon-book icon-white"></i> Тагирање</a>
+						</li>
+						#{/if}
+					#{/if}
+				#{/if}
             </ul>
           <div class="btn-group pull-right">
             #{user_login user:_user /}
