@@ -71,7 +71,7 @@
 				for(var i=0;i<data.length;i++) {
 					var tag=data[i];
 					word="ddd";
-					target.append('<span ondblclick="removeTaggedWord(this)" style="color:'+tag.tag.color+'" title="'+tag.name+'" data-start="'+tag.start+'" data-id="'+tag.id+'">'+
+					target.append('<span ondblclick="removeTaggedWord(this)" style="color:'+tag.tag.color+'" title="'+tag.tag.name+'" data-start="'+tag.start+'" data-id="'+tag.id+'">'+
 							'<b>'+wholeText.substring(tag.start,tag.end)+'</b>'
 							+' </span>');
 					
