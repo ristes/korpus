@@ -26,7 +26,7 @@ import utils.LuceneUtils;
 import utils.WordFilter;
 
 @With(Authentication.class)
-public class Dokuments extends Controller {
+public class Dokuments extends JsonController {
 
 	@Before
 	public static void init() {
@@ -126,28 +126,5 @@ public class Dokuments extends Controller {
 		renderJSON(toJson(word));
 	}
 
-	protected static String toJson(Object o) {
-		Gson gson = new GsonBuilder().setDateFormat("dd.MM.yyyy")
-				.setExclusionStrategies(ignoreManySet).create();
-		String s = gson.toJson(o);
-		return s;
-	}
-
-	private static ExclusionStrategy ignoreManySet = new ExclusionStrategy() {
-
-		@Override
-		public boolean shouldSkipField(FieldAttributes attrs) {
-			OneToMany otm = attrs.getAnnotation(OneToMany.class);
-			if (otm != null) {
-				return true;
-			} else {
-				return false;
-			}
-		}
-
-		@Override
-		public boolean shouldSkipClass(Class<?> clazz) {
-			return false;
-		}
-	};
+	
 }

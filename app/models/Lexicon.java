@@ -8,6 +8,8 @@ import play.db.jpa.Model;
 public class Lexicon extends Model {
 
 	public String word;
+	
+	public String lema;
 
 	public String tag;
 

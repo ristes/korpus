@@ -3,6 +3,19 @@
 	var delimiter=" ";
 	var valid="éабвгдѓежзѕијклљмнњопрстќуфхцчџшАБВГДЃЕЖЗЅИЈКЛЉМНЊОПРСТЌУФХЦЧЏШ1234567890'`";
 	
+	//first, checks if it isn't implemented yet
+	if (!String.prototype.format) {
+	  String.prototype.format = function() {
+	    var args = arguments;
+	    return this.replace(/{(\d+)}/g, function(match, number) { 
+	      return typeof args[number] != 'undefined'
+	        ? args[number]
+	        : match
+	      ;
+	    });
+	  };
+	}
+	
 	state={};
 	
 	function taggedSorter(a, b) {
@@ -19,17 +32,27 @@
 				return;
 			}
 			var wholeText=range.commonAncestorContainer.data;
-			var word=wholeText.substring(range.startOffset,range.endOffset);
-			var end=wholeText.indexOf(delimiter,range.endOffset);
+			var start=range.startOffset;
+			var end=range.endOffset-1;
+			while(valid.indexOf(wholeText[start])<0) {
+				start++;
+			}
+			while(valid.indexOf(wholeText[end])<0) {
+				end--;
+			}
+			end++;
+			
 			$.post('/dokuments/add', {
 					taggedWord : {
-						start : range.startOffset,
-						end : range.endOffset,
+						start : start,
+						end : end,
 						"dokument.id" : dokumentId,
 						"tag.id" : tagId
 					}							
 				}, function(data) {
-					$("#result").append('<span ondblclick="removeTaggedWord(this)" style="color:'+tagColor+'" title="'+tagName+'" data-start="'+range.startOffset+'">'+word+' </span>');
+					
+					var taggedWord=createTaggedWord(data);
+					$("#result").append(taggedWord);
 					var res=$("div#result span").sort(taggedSorter);
 					$("#result").html(res);
 					state.tags.push(data);
@@ -41,13 +64,28 @@
 		return annotate;
 	}
 	
+	function createTaggedWord(tag) {
+		el='<span ondblclick="removeTaggedWord(this)" onclick="markClickedWord(this)" style="color:{0};cursor:pointer" '+
+		'title="{1}" data-id="{2}" data-start="{3}" data-end="{4}">{5} </span>';
+		var wholeText=$("#source").html();
+		return el.format(tag.tag.color, tag.tag.name, tag.id, tag.start, tag.end, wholeText.substring(tag.start,tag.end));
+	}
+	
+	function skipWord() {
+		var selection=window.getSelection();
+		var range=selection.getRangeAt(0);
+		nextWord(range);
+		
+	}
 	
 	function nextWord(range) {
 		var selection=window.getSelection();
-	
-		var wholeText=range.endContainer.textContent;
+			
+		var wholeText=range.commonAncestorContainer.textContent;
+		var start, end=range.endOffset;
+		
 		do {
-			start=range.endOffset+1;
+			start=end+1;	
 			var word="";
 			while(valid.indexOf(wholeText[start])<0) { 
 				start++;
@@ -58,17 +96,11 @@
 				end++;
 			}
 			$("#selectedWord").html(word);
-			range.setStart(range.endContainer,start);
-			range.setEnd(range.endContainer, end);
 		} while(hasIntersectionWithTag(start, end));
-		
-		selection.removeAllRanges();
-		selection.addRange(range);
+		mark(start,end);
 	}
 	
 	function hasIntersectionWithTag(start, end) {
-		ss=start;
-		ee=end;
 		for(var i=0;i<state.tags.length;i++) {
 			var tag=state.tags[i];
 			if(start<tag.start) {
@@ -98,20 +130,37 @@
 						state.tags.splice(idx,1);
 					}
 					initSelection();
-		});
+		});		
+	}
+	
+	function markClickedWord(el) {
+		mark(el.dataset.start, el.dataset.end)	
 		
 	}
 	
-	function initSelection(){
+	function mark(start, end) {
 		var selection=window.getSelection();
 		var range=document.createRange();
 		var pre= document.getElementById("source");
 		range.selectNodeContents(pre);
-		range.setStart(pre.firstChild,0);
-		range.setEnd(pre.firstChild,0);
+		range.setStart(pre.firstChild,start);
+		range.setEnd(pre.firstChild,end);
 		selection.removeAllRanges();
-		selection.addRange(range);
-		nextWord(range);
+		selection.addRange(range);	
+		var wholeText=$("#source").html()
+		$.get('/lexiconcontroller/find?word='+wholeText.substring(start,end), 
+				function(data) {
+					var target=$("#preferedTags");
+					target.html("")
+					for(var i=0;i<data.length;i++) {
+						target.append('<div class="suggested-tag">{0} - {1}</div>'.format(data[i].word, data[i].tag));
+					}
+		});	
+		return range;
+	}
+	
+	function initSelection(){
+		nextWord(mark(0,0));
 		
 	}
 	
@@ -127,14 +176,10 @@
 					data=[];
 				}
 				var target=$("#result");
-				wholeText=$("#source").html();
 				state.tags=data;
 				for(var i=0;i<data.length;i++) {
 					var tag=data[i];
-					word="ddd";
-					target.append('<span ondblclick="removeTaggedWord(this)" style="color:'+tag.tag.color+'" title="'+tag.tag.name+'" data-start="'+tag.start+'" data-id="'+tag.id+'">'+
-							'<b>'+wholeText.substring(tag.start,tag.end)+'</b>'
-							+' </span>');
+					target.append(createTaggedWord(tag));
 					
 				}
 				var res=$("div#result span").sort(taggedSorter);
@@ -143,6 +188,8 @@
 				initSelection();
 			});
 	});
+	
+	
 	
 </script>
 
@@ -158,6 +205,13 @@
 							'${tag.color}','${tag.name}'));
 			</script>
 		#{/ list}
+		<div class="tag-button" id="new_button" style="width: 143px" >
+			<span class="key-combo">&rarr;</span>
+			<span class="key-action">Skip word</span>
+		</div>
+		<script type="text/javascript">
+				$(document).bind('keydown','right',skipWord);
+		</script>
 	</div>
 	
 	<pre id="source" style="max-height: 600px;overflow: scroll;clear:both" on="initSelection()">
