@@ -113,18 +113,17 @@ public class Dokuments extends JsonController {
 	public static void add(TaggedWord taggedWord) {
 		taggedWord.save();
 
-		renderJSON(toJson(taggedWord));
+		toJson(taggedWord);
 
 	}
 
 	public static void taggedWords(Dokument dokument) {
-		renderJSON(toJson(dokument.taggedWords));
+		toJson(dokument.taggedWords);
 	}
 
 	public static void remove(TaggedWord word) {
 		word.delete();
-		renderJSON(toJson(word));
+		toJson(word);
 	}
 
-	
 }

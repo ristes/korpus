@@ -23,7 +23,7 @@ public class LexiconController extends JsonController {
 	}
 
 	public static void find(String word) {
-		renderJSON(toJson(Lexicon.find("word", word).fetch()));
+		toJson(Lexicon.find("word", word).fetch());
 	}
 
 	private static void jdbc() {
