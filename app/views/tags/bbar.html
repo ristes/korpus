@@ -139,6 +139,8 @@
 	}
 	
 	function mark(start, end) {
+
+		getSuggestion(start,end);		
 		var selection=window.getSelection();
 		var range=document.createRange();
 		var pre= document.getElementById("source");
@@ -146,9 +148,16 @@
 		range.setStart(pre.firstChild,start);
 		range.setEnd(pre.firstChild,end);
 		selection.removeAllRanges();
-		selection.addRange(range);	
-		var wholeText=$("#source").html()
-		$.get('/lexiconcontroller/find?word='+wholeText.substring(start,end), 
+		selection.addRange(range);
+		setFocus(pre, start);
+		
+		return range;
+	}
+	
+	function getSuggestion(start, end) {
+		var wholeText=$("#source").html();
+		var word=wholeText.substring(start,end);
+		$.get('/lexiconcontroller/find?word='+word, 
 				function(data) {
 					var target=$("#preferedTags");
 					target.html("")
@@ -156,13 +165,32 @@
 						target.append('<div class="suggested-tag">{0} - {1}</div>'.format(data[i].word, data[i].tag));
 					}
 		});	
-		return range;
+	}
+	
+	function setFocus(target, start){
+		if (start != -1) {
+			target.focus();
+		        
+			var sh = target.scrollHeight; //height in pixel of the textarea (n_rows*line_height)
+			var jtarget=jQuery("#"+target.id);
+			var line_ht = jtarget.css('line-height').replace('px',''); //height in pixel of each row
+			var n_lines = sh/line_ht; // the total amount of lines
+			var char_in_line = target.innerText.length / n_lines; // amount of chars for each line
+			var height = Math.floor(start/char_in_line); // amount of lines in the textarea
+			jtarget.scrollTop(height*line_ht); // scroll to the selected line
+		} else {
+		        alert('parola '+parola_cercata+' non trovata'); // alert word not found
+		}
+		
 	}
 	
 	function initSelection(){
 		nextWord(mark(0,0));
 		
 	}
+	
+	
+	
 	
 	function sortTags(a,b) {
 		return parseInt(a.start,10) > parseInt(b.start,10) ? 1 : -1; 
