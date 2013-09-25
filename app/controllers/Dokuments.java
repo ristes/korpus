@@ -118,7 +118,7 @@ public class Dokuments extends JsonController {
 	}
 
 	public static void taggedWords(Dokument dokument) {
-		toJson(dokument.taggedWords);
+		toJson(dokument.taggedWords, "dokument");
 	}
 
 	public static void remove(TaggedWord word) {
