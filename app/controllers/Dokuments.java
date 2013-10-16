@@ -110,6 +110,11 @@ public class Dokuments extends JsonController {
 		render(doc, tags);
 	}
 
+	public static void getDocument(long documentId) {
+		Dokument doc = Dokument.findById(documentId);
+		toJson(doc);
+	}
+
 	public static void add(TaggedWord taggedWord) {
 		taggedWord.save();
 
@@ -118,7 +123,8 @@ public class Dokuments extends JsonController {
 	}
 
 	public static void taggedWords(Dokument dokument) {
-		toJson(dokument.taggedWords, "dokument","user");
+		toJson(dokument.taggedWords, "dokument", "group", "password", "role",
+				"binding","end");
 	}
 
 	public static void remove(TaggedWord word) {

@@ -1,3 +1,27 @@
+.tagging {
+	background-color: #aaf;
+	font-weight: bold;
+	padding: 2px;
+}
+
+#selectedWord {
+	font-size: 25px;
+	padding: 10px;
+	vertical-align: middle;
+}
+
+.word {
+	cursor: pointer;
+}
+
+.editor {
+	max-height: 600px;
+	overflow: scroll;
+	clear:both;
+	text-align: justify;
+	padding: 10px;
+}
+
 .tag-button {
 	float: left;
 	padding-right: 2px;

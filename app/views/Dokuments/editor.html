@@ -2,33 +2,24 @@
 
 <div class="row" style="margin-top: 20px">
 
-	<div>
+	
+
+	<div class="span9">
+		#{bbar docId: doc.id, text: doc.text, tags:tags /}				
 	</div>
-	<table>
-		<tr>
-			<td style="text-align: center;">
-				<h3 id="selectedWord">word</h3>
-			</td>
-			<td>
-				<ul id="preferedTags">
-				
-				</ul>
-			</td>
-		</tr>
-		<tr>
-			<td width="50%">
-				#{bbar docId: doc.id, text: doc.text, tags:tags /}				
-			</td>
-			<td width="50%">
-				<div>
-					<h4>Двоен клик врз зборот за отстранување на неговиот таг!</h4>
-					<hr/>
-				</div>
-				<div id="result" style="height: 600px;max-height: 600px;overflow: scroll;">
-					Loading ...
-				</div>
-			</td>
-		</tr>
-	</table>
+	
+	<div class="span3">
+		<span id="selectedWord">word</span> 
+		<a class="btn btn-mini btn-primary"><i id="scrollToWord" title="Позиционирај на тековен збор" class="icon-arrow-down icon-white"></i></a>
+		<hr/>
+		<ul id="preferedTags">
+		</ul>
+		<hr/>
+		<div id="tagInfo" class="span3" style="display: none">
+			<span class="label label-info" id="tagName">Тип</span>
+			<span class="label label-info" id="tagCreator">Уредник</span>
+			<a class="btn btn-mini btn-primary" title="Избриши" ><i id="tagRemove" class="icon-remove icon-white"></i></a>
+		</div>
+	</div>
 
 </div>
