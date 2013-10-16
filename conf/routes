@@ -13,9 +13,6 @@ GET     /public/                                staticDir:public
 GET     /bootstrap/                             staticDir:bootstrap
 
 
-# kocrud module
-* 		/										module:kocrud
-
 
 # Catch all
 *       /{controller}/{action}                  {controller}.{action}
