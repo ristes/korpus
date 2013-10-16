@@ -199,6 +199,7 @@ $(document).ready(function(){
 		}
 		$("#source").html(targetHtml);
 		$(".word").click(wordClick);
+		$("#selectedWord").html("Почекајте додека да се вчитаат таговите...")
 		$.post('/dokuments/taggedWords', 
 				{"dokument.id" : dokumentId},
 				function(data) {
